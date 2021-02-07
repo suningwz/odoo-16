@@ -23,3 +23,11 @@ class SaleOrder(models.Model):
                 )
                 if sale_type:
                     record.type_id = sale_type
+
+    @api.onchange("type_id")
+    def onchange_type_id(self):
+        super(SaleOrder, self).onchange_type_id()
+        for order in self:
+            order_type = order.type_id
+            if order_type.workflow_process_id:
+                order.update({'workflow_process_id': order_type.workflow_process_id})

@@ -5,7 +5,7 @@
     "version": "13.0.1.0.0",
     "license": "AGPL-3",
     "depends": ["sale_order_type"],
-    "data": [],
+    "data": ['views/sale_order_type_view.xml'],
     "installable": True,
 }
 
