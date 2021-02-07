@@ -9,5 +9,5 @@ class SaleOrderTypology(models.Model):
     workflow_process_id = fields.Many2one(
         comodel_name="sale.workflow.process",
         string="Flux Automatique",
-        copy=False,
+        ondelete="restrict",
     )
