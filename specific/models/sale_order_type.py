@@ -11,3 +11,8 @@ class SaleOrderTypology(models.Model):
         string="Flux Automatique",
         ondelete="restrict",
     )
+    partner_sequence_id = fields.Many2one(
+        comodel_name="ir.sequence",
+        string="Partner Sequence",
+        copy=False,
+    )
