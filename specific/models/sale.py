@@ -1,5 +1,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 from odoo import api, fields, models
+from odoo.addons.component.core import Component
+from odoo.addons.connector.components.mapper import mapping
 
 
 class SaleOrder(models.Model):
@@ -31,3 +33,15 @@ class SaleOrder(models.Model):
             order_type = order.type_id
             if order_type.workflow_process_id:
                 order.update({'workflow_process_id': order_type.workflow_process_id})
+
+
+class SaleOrderImportMapper(Component):
+    _inherit = 'prestashop.sale.order.mapper'
+
+    @mapping
+    def studio1(self, record):
+        return {'x_studio_statut_rsilience': "Envoyé à l’entrepôt"}
+
+    @mapping
+    def studio2(self, record):
+        return {'x_studio_type_de_livraison': "Log'ins"}
