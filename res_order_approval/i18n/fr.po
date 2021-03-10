@@ -52,6 +52,11 @@ msgid "Status"
 msgstr "État"
 
 #. module: res_order_approval
+#: model_terms:ir.ui.view,arch_db:res_order_approval.sale_order_approval_inherit
+msgid "Submit for approval"
+msgstr "Mettre en attente d'approbation"
+
+#. module: res_order_approval
 #: model:ir.model.fields.selection,name:res_order_approval.selection__sale_order__state__waiting_for_approval
 msgid "Waiting For Approval"
 msgstr "En attente d'approbation"
