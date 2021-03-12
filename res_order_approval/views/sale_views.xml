@@ -10,7 +10,8 @@
                   <field name="state" widget="statusbar" statusbar_visible="draft,sent,waiting_for_approval,sale"/>
               </xpath>
               
-              <xpath expr="//header" position="inside"> 
+              <xpath expr="//header" position="inside">
+                  <button name="submit_for_approval" string="Submit for approval" type="object" states="draft,sent"/>
                   <button name="action_confirm" string="Approve" type="object" class='oe_highlight'
                           attrs="{'invisible': [('state', '!=', 'waiting_for_approval')]}" />
               </xpath>
