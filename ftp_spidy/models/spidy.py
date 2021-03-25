@@ -72,6 +72,7 @@ class FtpJob(models.Model):
                               ('ready', 'Ready'),
                               ('done', 'Done')], 'State')
     event_ids = fields.One2many('ftp.event', 'job_id', 'Events')
+    product_ids = fields.Many2Many('product.product', string='Products')
 
     def _scheduler_ftp_import_in_files(self):
         #self.action_receive_files('/IN/RES/CR_PRE/', 'SHIP_IN')
@@ -123,9 +124,9 @@ class FtpJob(models.Model):
         datas.append(['Société/company', 'Entrepôt/warehouse', 'Réservé Spidy/Spidy reserved',
                       'Client propriétaire/owner code', 'Code produit/product code', 'Code à barre/Barcode',
                       'Quantité/quantity', 'Code unité/Unit code', 'Adresse email erreurs/Errors email adress'])
-        products = self.env['product.product'].search([('sale_ok', '=', True)])
-        for product in products:
-            datas.append(['ASF', 'ATS', '', 'RES', product.default_code, product.barcode, '', '', 'si@projet-resilience.fr'])
+        #product_ids = self.env['product.product'].search([('sale_ok', '=', True)])
+        for product in self.product_ids:
+            datas.append(['ASF', 'LVD', '', 'RES', product.default_code, product.barcode, '', '', 'si@projet-resilience.fr'])
         return datas
 
     def _prepare_product_out_datas(self):
@@ -143,13 +144,24 @@ class FtpJob(models.Model):
                       'UVC unité d\'oeuvre', 'UVC Hauteur', 'UVC Largeur', 'UVC Profondeur', 'Niv colisage', 'Code Kit article',
                       'Code contrôle article en reception', 'Nb de n° de série', 'Niveau Stock d\'alerte',
                       'Type de gestion d\'emplacement', 'Code statut produit', 'Code état enregistrement', 'Réservé spidy',
-                      'Réservé spidy', 'Réservé spidy', 'email erreur'])
-        products = self.env['product.product'].search([('sale_ok', '=', True)])
-        for product in products:
-            datas.append(['ASF', 'ATS', '', 'RES', product.default_code, '', product.name, '', '', '', 'UN', 'Unité', 1,
+                      'Réservé spidy', 'Réservé spidy', 'email erreur', 'Mode gestion lot', 'Gestion date 1', 'Gestion date 2', 'Gestion date 3',
+                      'Delai mini entre date rec et dte lot 1', 'Delai mini entre date rec et dte lot 2', 'Delai mini entre date rec et dte lot 3',
+                      'Libell_ date 1', 'Libell_ date 2', 'Libell_ date 3', 'Interdict lot depass', 'Type gestion lot', 'Emplacement Picking fixe',
+                      'Lien HTTP fiche produit', 'Fiche technique ligne 1', 'Fiche technique ligne 2', 'Fiche technique ligne 3', 'Fiche technique ligne 4',
+                      'Fiche technique ligne 5', 'Fiche technique ligne 6', 'Fiche technique ligne 7', 'Fiche technique ligne 8', 'Fiche technique ligne 9',
+                      'Fiche technique ligne 10', 'Fiche technique ligne 11', 'Fiche technique ligne 12', 'Fiche technique ligne 13',
+                      'Fiche technique ligne 14', 'Fiche technique ligne 15', 'Fiche technique ligne 16', 'Fiche technique ligne 17',
+                      'Fiche technique ligne 18', 'Fiche technique ligne 19', 'Fiche technique ligne 20', 'Gamme alcool', 'Degr_ alcool pur',
+                      'Volume effectif (litre)', 'Type gestion d\'alcool', 'R_serv_'])
+        #product_ids = self.env['product.product'].search([('sale_ok', '=', True)])
+        for product in self.product_ids:
+            datas.append(['ASF', 'LVD', '', 'RES', product.default_code, '', product.name, '', '', '', 'UN', 'Unité', 1,
                           '', '', '', '', '', '', 1, product.weight, '', '', '', '', '', product.list_price, 1,
                           '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
-                          '', '', '', 3, '', 'AT', '', '', '', 'si@projet-resilience.fr'])
+                          '', '', '', '2', '', 'AT', '', '', '', 'logistique@projet-resilience.fr',
+                          '', '', '', '', '', '', '', '', '', '', '', '', '',
+                          '', '', '', '', '', '', '', '', '', '', '', '', '',
+                          '', '', '', '', '', '', '', '', '', '', '', '', ''])
         return datas
 
     def _prepare_ship_out_datas(self):
