@@ -104,7 +104,10 @@ class FtpJob(models.Model):
         return True
 
     def action_plan(self):
-        if 'OUT' in self.ftp_type:
+        if self.ftp_type in ['BARCODE_OUT','PRODUCT_OUT']:
+            if self.product_ids:
+                self.write({'state': 'progress'})
+        elif 'OUT' in self.ftp_type:
             #add events
             event_ids = self.env['ftp.event'].search([('ftp_type', '=', self.ftp_type),
                                                       ('create_date', '<=', self.to_datetime),
@@ -115,9 +118,11 @@ class FtpJob(models.Model):
                 self.write({'state': 'progress'})
             else:
                 self.write({'state': 'done'})
-        if 'IN' in self.ftp_type:
+        elif 'IN' in self.ftp_type:
             self.parse_attachment_and_create_events()
             self.write({'state': 'progress'})
+        else:
+            self.write({'state': 'done'})
 
     def _prepare_barcode_out_datas(self):
         datas = []
