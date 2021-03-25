@@ -72,7 +72,7 @@ class FtpJob(models.Model):
                               ('ready', 'Ready'),
                               ('done', 'Done')], 'State')
     event_ids = fields.One2many('ftp.event', 'job_id', 'Events')
-    product_ids = fields.Many2Many('product.product', string='Products')
+    product_ids = fields.Many2many('product.product', string='Products')
 
     def _scheduler_ftp_import_in_files(self):
         #self.action_receive_files('/IN/RES/CR_PRE/', 'SHIP_IN')
