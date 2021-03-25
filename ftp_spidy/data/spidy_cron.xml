@@ -11,7 +11,7 @@
         <field name="interval_type">minutes</field>
         <field name="numbercall">-1</field>
         <field name="doall" eval="False"/>
-        <field name="model_id" ref="specific_resilience.model_ftp_job"/>
+        <field name="model_id" ref="ftp_spidy.model_ftp_job"/>
     </record>
 
     <record forcecreate="True" id="ir_cron_export_ftp_products" model="ir.cron">
@@ -24,7 +24,7 @@
         <field name="interval_type">minutes</field>
         <field name="numbercall">-1</field>
         <field name="doall" eval="False"/>
-        <field name="model_id" ref="specific_resilience.model_ftp_job"/>
+        <field name="model_id" ref="ftp_spidy.model_ftp_job"/>
     </record>
 
     <record forcecreate="True" id="ir_cron_export_ftp_shipping" model="ir.cron">
@@ -37,7 +37,7 @@
         <field name="interval_type">minutes</field>
         <field name="numbercall">-1</field>
         <field name="doall" eval="False"/>
-        <field name="model_id" ref="specific_resilience.model_ftp_job"/>
+        <field name="model_id" ref="ftp_spidy.model_ftp_job"/>
     </record>
 
     <record forcecreate="True" id="ir_cron_export_ftp_receiving" model="ir.cron">
@@ -50,7 +50,7 @@
         <field name="interval_type">minutes</field>
         <field name="numbercall">-1</field>
         <field name="doall" eval="False"/>
-        <field name="model_id" ref="specific_resilience.model_ftp_job"/>
+        <field name="model_id" ref="ftp_spidy.model_ftp_job"/>
     </record>
 
     <record forcecreate="True" id="ir_cron_import_ftp_in_files" model="ir.cron">
@@ -63,7 +63,7 @@
         <field name="interval_type">minutes</field>
         <field name="numbercall">-1</field>
         <field name="doall" eval="False"/>
-        <field name="model_id" ref="specific_resilience.model_ftp_job"/>
+        <field name="model_id" ref="ftp_spidy.model_ftp_job"/>
     </record>
 
 </odoo>
