@@ -8,7 +8,7 @@
     "author": "Romain Deheele",
     "category": "Warehouse",
     "license": "AGPL-3",
-    "depends": ["stock", "sale", "delivery"],
+    "depends": ["stock", "sale", "delivery", "purchase_stock"],
     "data": ['views/spidy_views.xml',
              'data/spidy_cron.xml',
              'security/ir.model.access.csv'
