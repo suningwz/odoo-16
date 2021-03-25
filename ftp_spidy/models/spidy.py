@@ -46,6 +46,14 @@ class FtpEvent(models.Model):
     job_id = fields.Many2one('ftp.job', 'Job')
     picking_id = fields.Many2one('stock.picking', 'Picking')
 
+    @api.onchange('ftp_type')
+    def onchange_ftp_type(self):
+        for rec in self:
+            if rec.ftp_type == 'SHIP_OUT':
+                return {'domain': {'picking_id': [('picking_type_id', '=', 2),('state','=','assigned')]}}
+            if rec.ftp_type == 'REC_OUT':
+                return {'domain': {'picking_id': [('picking_type_id', '=', 1),('state','=','assigned')]}}
+
     def action_done(self):
         self.write({'state': 'done'})
 
