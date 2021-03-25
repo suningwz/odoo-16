@@ -10,7 +10,8 @@
     "license": "AGPL-3",
     "depends": ["stock", "sale", "delivery"],
     "data": ['views/spidy_views.xml',
-             'data/spidy_cron.xml'
+             'data/spidy_cron.xml',
+             'security/ir.model.access.csv'
     ],
     "installable": True,
     "auto_install": False,

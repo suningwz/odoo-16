@@ -1,0 +1,4 @@
+"id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
+"access_ftp_backend_product_manager","ftp.backend","model_ftp_backend","base.group_user",1,1,1,1
+"access_ftp_job_product_manager","ftp.job","model_ftp_job",base.group_user,1,1,1,1
+"access_ftp_event_product_manager","ftp.event","model_ftp_event",base.group_user,1,1,1,1
