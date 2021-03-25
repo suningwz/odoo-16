@@ -251,6 +251,7 @@ class FtpJob(models.Model):
                 'res_model': 'ftp.job'
             })
             self.write({'state': 'ready'})
+            self.event_ids.write({'state': 'ready'})
 
     """def make_file2(self):
         home = '/tmp/'
