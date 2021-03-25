@@ -9,6 +9,17 @@ from dateutil.relativedelta import relativedelta
 from odoo import fields, models, api
 
 
+class PurchaseOrder(models.Model):
+    _inherit = 'purchase.order'
+
+    def button_approve(self, force=False):
+        result = super(PurchaseOrder, self).button_approve(force=force)
+        if self.picking_ids:
+            self.env['ftp.event'].create({'picking_id': self.picking_ids[0].id,
+                                          'ftp_type': 'REC_OUT'})
+        return result
+
+
 class FtpBackend(models.Model):
     _name = 'ftp.backend'
 
@@ -284,7 +295,6 @@ class FtpJob(models.Model):
 
     def ftp_connect(self):
         backend = self.env['ftp.backend'].search([],limit=1)
-        import pdb;pdb.set_trace()
         from ftplib import FTP
         ftp = FTP(backend.host)
         ftp.login(user=backend.username, passwd=backend.password)
@@ -391,3 +401,5 @@ class StockPicking(models.Model):
      #stock.picking, action_done
      #purchase.order, button_approve
      #mrp.production, action_confirm, button_mark_done
+
+
