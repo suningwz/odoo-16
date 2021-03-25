@@ -1,0 +1,523 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* ftp_spidy
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 13.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-03-25 13:13+0000\n"
+"PO-Revision-Date: 2021-03-25 13:13+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: ftp_spidy
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_job__access_warning
+msgid "Access warning"
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_job__message_needaction
+msgid "Action Needed"
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_job__activity_ids
+msgid "Activities"
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_job__activity_exception_decoration
+msgid "Activity Exception Decoration"
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_job__activity_state
+msgid "Activity State"
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_job__message_attachment_count
+msgid "Attachment Count"
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.model.fields.selection,name:ftp_spidy.selection__ftp_job__ftp_type__barcode_out
+msgid "Barcode OUT"
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_backend__create_uid
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_event__create_uid
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_job__create_uid
+msgid "Created by"
+msgstr "Créé par"
+
+#. module: ftp_spidy
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_backend__create_date
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_event__create_date
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_job__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.model.fields,help:ftp_spidy.field_ftp_job__access_url
+msgid "Customer Portal URL"
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_backend__display_name
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_event__display_name
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_job__display_name
+msgid "Display Name"
+msgstr "Nom"
+
+#. module: ftp_spidy
+#: model:ir.model.fields.selection,name:ftp_spidy.selection__ftp_event__state__done
+#: model:ir.model.fields.selection,name:ftp_spidy.selection__ftp_job__state__done
+msgid "Done"
+msgstr "Terminé"
+
+#. module: ftp_spidy
+#: model:ir.model.fields.selection,name:ftp_spidy.selection__ftp_event__state__draft
+#: model:ir.model.fields.selection,name:ftp_spidy.selection__ftp_job__state__draft
+msgid "Draft"
+msgstr "Brouillon"
+
+#. module: ftp_spidy
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_job__event_ids
+#: model:ir.model.fields,field_description:ftp_spidy.field_stock_picking__event_ids
+msgid "Events"
+msgstr "Evenements"
+
+#. module: ftp_spidy
+#: model_terms:ir.ui.view,arch_db:ftp_spidy.stock_picking_resilience_form
+msgid "FTP"
+msgstr "FTP"
+
+#. module: ftp_spidy
+#: model:ir.actions.server,name:ftp_spidy.ir_cron_export_ftp_barcodes_ir_actions_server
+#: model:ir.cron,cron_name:ftp_spidy.ir_cron_export_ftp_barcodes
+#: model:ir.cron,name:ftp_spidy.ir_cron_export_ftp_barcodes
+msgid "FTP - Export Barcodes"
+msgstr "FTP - Export Barcodes"
+
+#. module: ftp_spidy
+#: model:ir.actions.server,name:ftp_spidy.ir_cron_export_ftp_products_ir_actions_server
+#: model:ir.cron,cron_name:ftp_spidy.ir_cron_export_ftp_products
+#: model:ir.cron,name:ftp_spidy.ir_cron_export_ftp_products
+msgid "FTP - Export Products"
+msgstr "FTP - Export Produits"
+
+#. module: ftp_spidy
+#: model:ir.actions.server,name:ftp_spidy.ir_cron_export_ftp_receiving_ir_actions_server
+#: model:ir.cron,cron_name:ftp_spidy.ir_cron_export_ftp_receiving
+#: model:ir.cron,name:ftp_spidy.ir_cron_export_ftp_receiving
+msgid "FTP - Export Receiving"
+msgstr "FTP - Export Receiving"
+
+#. module: ftp_spidy
+#: model:ir.actions.server,name:ftp_spidy.ir_cron_export_ftp_shipping_ir_actions_server
+#: model:ir.cron,cron_name:ftp_spidy.ir_cron_export_ftp_shipping
+#: model:ir.cron,name:ftp_spidy.ir_cron_export_ftp_shipping
+msgid "FTP - Export Shipping"
+msgstr "FTP - Export Shipping"
+
+#. module: ftp_spidy
+#: model:ir.actions.server,name:ftp_spidy.ir_cron_import_ftp_in_files_ir_actions_server
+#: model:ir.cron,cron_name:ftp_spidy.ir_cron_import_ftp_in_files
+#: model:ir.cron,name:ftp_spidy.ir_cron_import_ftp_in_files
+msgid "FTP - Import IN Files"
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.actions.act_window,name:ftp_spidy.action_ftp_backend_form
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_backend__name
+#: model:ir.ui.menu,name:ftp_spidy.menu_action_ftp_backend_form
+msgid "FTP Backend"
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.actions.act_window,name:ftp_spidy.action_ftp_event_form
+#: model:ir.ui.menu,name:ftp_spidy.menu_action_ftp_event_form
+msgid "FTP Events"
+msgstr "FTP Evènements"
+
+#. module: ftp_spidy
+#: model:ir.actions.act_window,name:ftp_spidy.action_ftp_job_form
+#: model:ir.ui.menu,name:ftp_spidy.menu_action_ftp_job_form
+msgid "FTP Jobs"
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.ui.menu,name:ftp_spidy.menu_ftp_spidy
+msgid "FTP Spidy"
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_job__message_follower_ids
+msgid "Followers"
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_job__message_channel_ids
+msgid "Followers (Channels)"
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_job__message_partner_ids
+msgid "Followers (Partners)"
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_job__from_datetime
+msgid "From Datetime"
+msgstr "De"
+
+#. module: ftp_spidy
+#: model_terms:ir.ui.view,arch_db:ftp_spidy.ftp_backend_form
+msgid "Ftp Backend"
+msgstr ""
+
+#. module: ftp_spidy
+#: model_terms:ir.ui.view,arch_db:ftp_spidy.ftp_backend_tree
+msgid "Ftp Backends"
+msgstr ""
+
+#. module: ftp_spidy
+#: model_terms:ir.ui.view,arch_db:ftp_spidy.ftp_event_form
+#: model_terms:ir.ui.view,arch_db:ftp_spidy.ftp_event_tree
+msgid "Ftp Events"
+msgstr "Ftp Evènements"
+
+#. module: ftp_spidy
+#: model_terms:ir.ui.view,arch_db:ftp_spidy.ftp_job_form
+#: model_terms:ir.ui.view,arch_db:ftp_spidy.ftp_job_tree
+msgid "Ftp Jobs"
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_job__ftp_type
+msgid "Ftp Type"
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_backend__id
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_event__id
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_job__id
+msgid "ID"
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_job__activity_exception_icon
+msgid "Icon"
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.model.fields,help:ftp_spidy.field_ftp_job__activity_exception_icon
+msgid "Icon to indicate an exception activity."
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.model.fields,help:ftp_spidy.field_ftp_job__message_needaction
+#: model:ir.model.fields,help:ftp_spidy.field_ftp_job__message_unread
+msgid "If checked, new messages require your attention."
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.model.fields,help:ftp_spidy.field_ftp_job__message_has_error
+#: model:ir.model.fields,help:ftp_spidy.field_ftp_job__message_has_sms_error
+msgid "If checked, some messages have a delivery error."
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_job__message_is_follower
+msgid "Is Follower"
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_event__job_id
+msgid "Job"
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_backend____last_update
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_event____last_update
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_job____last_update
+msgid "Last Modified on"
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_backend__write_uid
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_event__write_uid
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_job__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_backend__write_date
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_event__write_date
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_job__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_job__message_main_attachment_id
+msgid "Main Attachment"
+msgstr ""
+
+#. module: ftp_spidy
+#: model_terms:ir.ui.view,arch_db:ftp_spidy.ftp_job_form
+msgid "Make File"
+msgstr "Créer le fichier"
+
+#. module: ftp_spidy
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_job__message_has_error
+msgid "Message Delivery error"
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_job__message_ids
+msgid "Messages"
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.model.fields.selection,name:ftp_spidy.selection__ftp_job__ftp_type__mvt_in
+msgid "Movement IN"
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.model.fields.selection,name:ftp_spidy.selection__ftp_job__ftp_type__mvt_out
+msgid "Movement OUT"
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_event__name
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_job__name
+msgid "Name"
+msgstr "Nom"
+
+#. module: ftp_spidy
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_job__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_job__activity_summary
+msgid "Next Activity Summary"
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_job__activity_type_id
+msgid "Next Activity Type"
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_job__message_needaction_counter
+msgid "Number of Actions"
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_job__message_has_error_counter
+msgid "Number of errors"
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.model.fields,help:ftp_spidy.field_ftp_job__message_needaction_counter
+msgid "Number of messages which requires an action"
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.model.fields,help:ftp_spidy.field_ftp_job__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.model.fields,help:ftp_spidy.field_ftp_job__message_unread_counter
+msgid "Number of unread messages"
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_backend__password
+msgid "Password"
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_event__picking_id
+msgid "Picking"
+msgstr ""
+
+#. module: ftp_spidy
+#: model_terms:ir.ui.view,arch_db:ftp_spidy.ftp_job_form
+msgid "Planifie"
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_backend__port
+msgid "Port"
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_job__access_url
+msgid "Portal Access URL"
+msgstr ""
+
+#. module: ftp_spidy
+#: model_terms:ir.ui.view,arch_db:ftp_spidy.ftp_job_form
+msgid "Process"
+msgstr "Terminer"
+
+#. module: ftp_spidy
+#: model:ir.model.fields.selection,name:ftp_spidy.selection__ftp_job__ftp_type__product_in
+msgid "Product IN"
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.model.fields.selection,name:ftp_spidy.selection__ftp_job__ftp_type__product_out
+msgid "Product OUT"
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.model.fields.selection,name:ftp_spidy.selection__ftp_job__state__progress
+msgid "Progress"
+msgstr "En cours"
+
+#. module: ftp_spidy
+#: model:ir.model.fields.selection,name:ftp_spidy.selection__ftp_event__ftp_type__rec_out
+msgid "REC_OUT"
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.model.fields.selection,name:ftp_spidy.selection__ftp_event__state__ready
+#: model:ir.model.fields.selection,name:ftp_spidy.selection__ftp_job__state__ready
+msgid "Ready"
+msgstr "Prêt"
+
+#. module: ftp_spidy
+#: model:ir.model.fields.selection,name:ftp_spidy.selection__ftp_job__ftp_type__rec_in
+msgid "Receiving IN"
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.model.fields.selection,name:ftp_spidy.selection__ftp_job__ftp_type__rec_out
+msgid "Receiving OUT"
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_job__activity_user_id
+msgid "Responsible User"
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.model.fields.selection,name:ftp_spidy.selection__ftp_event__ftp_type__ship_out
+msgid "SHIP_OUT"
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_job__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_job__access_token
+msgid "Security Token"
+msgstr ""
+
+#. module: ftp_spidy
+#: model_terms:ir.ui.view,arch_db:ftp_spidy.ftp_job_form
+msgid "Send File"
+msgstr "Envoyer le fichier"
+
+#. module: ftp_spidy
+#: model:ir.model.fields.selection,name:ftp_spidy.selection__ftp_job__ftp_type__ship_in
+msgid "Shipping IN"
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.model.fields.selection,name:ftp_spidy.selection__ftp_job__ftp_type__ship_out
+msgid "Shipping OUT"
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_event__state
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_job__state
+msgid "State"
+msgstr "Etat"
+
+#. module: ftp_spidy
+#: model:ir.model.fields,help:ftp_spidy.field_ftp_job__activity_state
+msgid ""
+"Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_job__to_datetime
+msgid "To Datetime"
+msgstr "Jusque"
+
+#. module: ftp_spidy
+#: model:ir.model,name:ftp_spidy.model_stock_picking
+msgid "Transfer"
+msgstr "Transfert"
+
+#. module: ftp_spidy
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_event__ftp_type
+msgid "Type"
+msgstr "Type"
+
+#. module: ftp_spidy
+#: model:ir.model.fields,help:ftp_spidy.field_ftp_job__activity_exception_decoration
+msgid "Type of the exception activity on record."
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_backend__host
+msgid "URL"
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_job__message_unread
+msgid "Unread Messages"
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_job__message_unread_counter
+msgid "Unread Messages Counter"
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_backend__username
+msgid "Username"
+msgstr "Login"
+
+#. module: ftp_spidy
+#: model:ir.model.fields,field_description:ftp_spidy.field_ftp_job__website_message_ids
+msgid "Website Messages"
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.model.fields,help:ftp_spidy.field_ftp_job__website_message_ids
+msgid "Website communication history"
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.model,name:ftp_spidy.model_ftp_backend
+msgid "ftp.backend"
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.model,name:ftp_spidy.model_ftp_event
+msgid "ftp.event"
+msgstr ""
+
+#. module: ftp_spidy
+#: model:ir.model,name:ftp_spidy.model_ftp_job
+msgid "ftp.job"
+msgstr ""
