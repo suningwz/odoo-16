@@ -126,9 +126,8 @@
                         <field name="name"/>
                         <field name="from_datetime"/>
                         <field name="to_datetime"/>
-                        <field name="event_ids">
+                        <field name="event_ids"/>
                         <field name="product_ids" attrs="{'invisible': [('ftp_type', 'not in', ['PRODUCT_OUT','BARCODE_OUT'])]}"/>
-                        </field>
                     </group>
                 </sheet>
                     <!-- Attachment preview -->
