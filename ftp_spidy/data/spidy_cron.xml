@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <record forcecreate="True" id="ir_cron_export_ftp_barcodes" model="ir.cron">
+        <field name="name">FTP - Export Barcodes</field>
+        <field name="active" eval="False"/>
+        <field name="user_id" ref="base.user_root"/>
+        <field name="interval_number">30</field>
+        <field name="state">code</field>
+        <field name="code">model._scheduler_ftp_export_barcodes()</field>
+        <field name="interval_type">minutes</field>
+        <field name="numbercall">-1</field>
+        <field name="doall" eval="False"/>
+        <field name="model_id" ref="ftp_spidy.model_ftp_job"/>
+    </record>
+
+    <record forcecreate="True" id="ir_cron_export_ftp_products" model="ir.cron">
+        <field name="name">FTP - Export Products</field>
+        <field name="active" eval="False"/>
+        <field name="user_id" ref="base.user_root"/>
+        <field name="interval_number">30</field>
+        <field name="state">code</field>
+        <field name="code">model._scheduler_ftp_export_products()</field>
+        <field name="interval_type">minutes</field>
+        <field name="numbercall">-1</field>
+        <field name="doall" eval="False"/>
+        <field name="model_id" ref="ftp_spidy.model_ftp_job"/>
+    </record>
+
+    <record forcecreate="True" id="ir_cron_export_ftp_shipping" model="ir.cron">
+        <field name="name">FTP - Export Shipping</field>
+        <field name="active" eval="False"/>
+        <field name="user_id" ref="base.user_root"/>
+        <field name="interval_number">30</field>
+        <field name="state">code</field>
+        <field name="code">model._scheduler_ftp_export_shipping()</field>
+        <field name="interval_type">minutes</field>
+        <field name="numbercall">-1</field>
+        <field name="doall" eval="False"/>
+        <field name="model_id" ref="ftp_spidy.model_ftp_job"/>
+    </record>
+
+    <record forcecreate="True" id="ir_cron_export_ftp_receiving" model="ir.cron">
+        <field name="name">FTP - Export Receiving</field>
+        <field name="active" eval="False"/>
+        <field name="user_id" ref="base.user_root"/>
+        <field name="interval_number">30</field>
+        <field name="state">code</field>
+        <field name="code">model._scheduler_ftp_export_receiving()</field>
+        <field name="interval_type">minutes</field>
+        <field name="numbercall">-1</field>
+        <field name="doall" eval="False"/>
+        <field name="model_id" ref="ftp_spidy.model_ftp_job"/>
+    </record>
+
+    <record forcecreate="True" id="ir_cron_import_ftp_in_files" model="ir.cron">
+        <field name="name">FTP - Import IN Files</field>
+        <field name="active" eval="False"/>
+        <field name="user_id" ref="base.user_root"/>
+        <field name="interval_number">30</field>
+        <field name="state">code</field>
+        <field name="code">model._scheduler_ftp_import_in_files()</field>
+        <field name="interval_type">minutes</field>
+        <field name="numbercall">-1</field>
+        <field name="doall" eval="False"/>
+        <field name="model_id" ref="ftp_spidy.model_ftp_job"/>
+    </record>
+
+</odoo>
