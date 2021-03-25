@@ -109,7 +109,7 @@ class FtpJob(models.Model):
                                                       ('create_date', '<=', self.to_datetime),
                                                       ('create_date', '>=', self.from_datetime),
                                                       ('job_id','=', False)])
-            if event_ids:
+            if event_ids or self.event_ids:
                 event_ids.write({'job_id': self.id})
                 self.write({'state': 'progress'})
             else:
