@@ -89,7 +89,7 @@ class FtpJob(models.Model):
     state = fields.Selection([('draft', 'Draft'),
                               ('progress', 'Progress'),
                               ('ready', 'Ready'),
-                              ('done', 'Done')], 'State')
+                              ('done', 'Done')], 'State', default='draft')
     event_ids = fields.One2many('ftp.event', 'job_id', 'Events')
     product_ids = fields.Many2many('product.product', string='Products')
 
