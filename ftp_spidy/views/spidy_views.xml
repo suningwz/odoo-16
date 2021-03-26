@@ -115,18 +115,37 @@
             <form string="Ftp Jobs">
                 <header>
                     <field name="state" widget="statusbar" statusbar_visible="draft,ready,done"/>
-                    <button name="action_plan" string="Planifie" type="object"/>
-                    <button name="action_make_file" string="Make File" type="object"/>
-                    <button name="action_send_file" string="Send File" type="object"/>
-                    <button name="action_done" string="Process" type="object"/>
+                    <button name="action_plan" string="Planifie" type="object" states="draft"/>
+                    <button name="action_make_file" string="Make File" type="object" states="progress"/>
+                    <button name="action_send_file" string="Send File" type="object" states="ready"/>
+                    <button name="action_done" string="Process" type="object" states="ready"/>
                 </header>
                 <sheet>
                     <group name="Ftp">
-                        <field name="ftp_type"/>
+                        <field name="ftp_type" attrs="{'readonly': [('state', 'in', ('progress','ready','done'))]}"/>
                         <field name="name"/>
-                        <field name="from_datetime"/>
-                        <field name="to_datetime"/>
-                        <field name="event_ids"/>
+                        <field name="from_datetime" attrs="{'readonly': [('state', 'in', ('ready','done'))]}"/>
+                        <field name="to_datetime" attrs="{'readonly': [('state', 'in', ('ready','done'))]}"/>
+                        <field name="event_ids" attrs="{'readonly': [('state', 'in', ('ready','done'))], 'invisible': [('ftp_type', 'in', ['PRODUCT_OUT','BARCODE_OUT'])]}"
+                               context="{'default_ftp_type': ftp_type}">
+                            <form>
+                              <group>
+                                <field name="name" invisible="True"/>
+                                <field name="create_date"/>
+                                <field name="job_id" invisible="True"/>
+                                <field name="picking_id"/>
+                                <field name="ftp_type" readonly="True"/>
+                                <field name="state" readonly="True"/>
+                              </group>
+                            </form>
+                            <tree>
+                                <field name="name"/>
+                                <field name="create_date"/>
+                                <field name="ftp_type"/>
+                                <field name="job_id" invisible="True"/>
+                                <field name="state"/>
+                            </tree>
+                        </field>
                         <field name="product_ids" attrs="{'invisible': [('ftp_type', 'not in', ['PRODUCT_OUT','BARCODE_OUT'])]}"/>
                     </group>
                 </sheet>
