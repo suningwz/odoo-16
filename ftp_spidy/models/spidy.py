@@ -235,8 +235,9 @@ class FtpJob(models.Model):
                 datas.append(['', 'ASF', 'LVD', sale.name, 'RES', partner.name or '', partner.street or '', partner.street2 or '', '',
                               partner.zip or '', partner.city or '', partner.country_id and partner.country_id.code or '',
                               '', '', '', '', '', 1, pick.scheduled_date and (pick.scheduled_date.strftime('%y%m%d')) or '',
-                              '', '', '', '', '', '', '', '', '', '', '', '',
-                              line_nb, line.product_id and line.product_id.default_code or '', '', int(line.product_uom_qty) or '', '', '', line.price_unit or '',
+                              'CPTR', '', '', '', '', '', '', '', '', '', '', 'RES',
+                              line_nb, line.product_id and line.product_id.default_code or '', '', int(line.product_uom_qty) or '', '', '',
+                              line.product_id and line.product_id.standard_price or 0.0,
                               'logistique@projet-resilience.fr','','','','','','','','','','',
                               partner.phone or '', '','','','','','','','','','','','','','','','','','',''])
         return datas
