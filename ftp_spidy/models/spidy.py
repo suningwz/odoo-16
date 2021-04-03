@@ -45,6 +45,8 @@ class FtpEvent(models.Model):
     state = fields.Selection([('draft', 'Draft'), ('ready', 'Ready'), ('done', 'Done')], 'State', default='draft')
     job_id = fields.Many2one('ftp.job', 'Job')
     picking_id = fields.Many2one('stock.picking', 'Picking')
+    sale_id = fields.Many2one('sale.order', related='picking_id.sale_id', string='Sale Order')
+    partner_id = fields.Many2one('res.partner', related='picking_id.partner_id', string='Partner')
 
     @api.onchange('ftp_type')
     def onchange_ftp_type(self):

@@ -78,6 +78,8 @@
                         <field name="create_date"/>
                         <field name="job_id"/>
                         <field name="picking_id"/>
+                        <field name="sale_id"/>
+                        <field name="partner_id"/>
                         <field name="ftp_type"/>
                     </group>
                 </sheet>
