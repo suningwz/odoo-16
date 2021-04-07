@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2021 Romain Deheele License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+
+    <record id="action_ftp_backend_form" model="ir.actions.act_window">
+        <field name="name">FTP Backend</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">ftp.backend</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <menuitem name="FTP Spidy" id="menu_ftp_spidy" parent="stock.menu_stock_config_settings" sequence="90"/>
+    <menuitem action="action_ftp_backend_form" id="menu_action_ftp_backend_form" parent="menu_ftp_spidy" sequence="1"/>
+
+    <record id="ftp_backend_tree" model="ir.ui.view">
+        <field name="name">ftp.backend.tree</field>
+        <field name="model">ftp.backend</field>
+        <field name="arch" type="xml">
+            <tree string="Ftp Backends">
+                <field name="name"/>
+                <field name="host"/>
+                <field name="port"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="ftp_backend_form" model="ir.ui.view">
+        <field name="name">ftp.backend.form</field>
+        <field name="model">ftp.backend</field>
+        <field name="arch" type="xml">
+            <form string="Ftp Backend">
+                <sheet>
+                    <group name="Ftp">
+                        <field name="name"/>
+                        <field name="host"/>
+                        <field name="port"/>
+                        <field name="username"/>
+                        <field name="password"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="action_ftp_event_form" model="ir.actions.act_window">
+        <field name="name">FTP Events</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">ftp.event</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <menuitem action="action_ftp_event_form" id="menu_action_ftp_event_form" parent="menu_ftp_spidy" sequence="2"/>
+
+    <record id="ftp_event_tree" model="ir.ui.view">
+        <field name="name">ftp.event.tree</field>
+        <field name="model">ftp.event</field>
+        <field name="arch" type="xml">
+            <tree string="Ftp Events">
+                <field name="name"/>
+                <field name="create_date"/>
+                <field name="ftp_type"/>
+                <field name="job_id"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="ftp_event_form" model="ir.ui.view">
+        <field name="name">ftp.event.form</field>
+        <field name="model">ftp.event</field>
+        <field name="arch" type="xml">
+            <form string="Ftp Events">
+                <header>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,done"/>
+                </header>
+                <sheet>
+                    <group name="Ftp">
+                        <field name="name" invisible="True"/>
+                        <field name="create_date"/>
+                        <field name="job_id"/>
+                        <field name="picking_id"/>
+                        <field name="sale_id"/>
+                        <field name="partner_id"/>
+                        <field name="ftp_type"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_ftp_job_form" model="ir.actions.act_window">
+        <field name="name">FTP Jobs</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">ftp.job</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <menuitem action="action_ftp_job_form" id="menu_action_ftp_job_form" parent="menu_ftp_spidy" sequence="3"/>
+
+    <record id="ftp_job_tree" model="ir.ui.view">
+        <field name="name">ftp.job.tree</field>
+        <field name="model">ftp.job</field>
+        <field name="arch" type="xml">
+            <tree string="Ftp Jobs">
+                <field name="ftp_type"/>
+                <field name="name"/>
+                <field name="from_datetime"/>
+                <field name="to_datetime"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+
+    <record id="ftp_job_form" model="ir.ui.view">
+        <field name="name">ftp.job.form</field>
+        <field name="model">ftp.job</field>
+        <field name="arch" type="xml">
+            <form string="Ftp Jobs">
+                <header>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,ready,done"/>
+                    <button name="action_plan" string="Planifie" type="object" states="draft"/>
+                    <button name="action_make_file" string="Make File" type="object" states="progress"/>
+                    <button name="action_send_file" string="Send File" type="object" states="ready"/>
+                    <button name="action_done" string="Process" type="object" states="ready"/>
+                </header>
+                <sheet>
+                    <group name="Ftp">
+                        <field name="ftp_type" attrs="{'readonly': [('state', 'in', ('progress','ready','done'))]}"/>
+                        <field name="name"/>
+                        <field name="from_datetime" attrs="{'readonly': [('state', 'in', ('ready','done'))]}"/>
+                        <field name="to_datetime" attrs="{'readonly': [('state', 'in', ('ready','done'))]}"/>
+                        <field name="event_ids" attrs="{'readonly': [('state', 'in', ('ready','done'))], 'invisible': [('ftp_type', 'in', ['PRODUCT_OUT','BARCODE_OUT'])]}"
+                               context="{'default_ftp_type': ftp_type}">
+                            <form>
+                              <group>
+                                <field name="name" invisible="True"/>
+                                <field name="create_date"/>
+                                <field name="job_id" invisible="True"/>
+                                <field name="picking_id"/>
+                                <field name="ftp_type" readonly="True"/>
+                                <field name="state" readonly="True"/>
+                              </group>
+                            </form>
+                            <tree>
+                                <field name="name"/>
+                                <field name="create_date"/>
+                                <field name="ftp_type"/>
+                                <field name="job_id" invisible="True"/>
+                                <field name="state"/>
+                            </tree>
+                        </field>
+                        <field name="product_ids" attrs="{'invisible': [('ftp_type', 'not in', ['PRODUCT_OUT','BARCODE_OUT'])]}"/>
+                    </group>
+                </sheet>
+                    <!-- Attachment preview -->
+                    <div class="o_attachment_preview"/>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+
+            </form>
+        </field>
+    </record>
+
+   <record id="stock_picking_resilience_form" model="ir.ui.view">
+        <field name="name">stock.picking.resilience.form</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="/form/sheet/notebook" position="inside">
+                <page string="FTP" name="FTP">
+                  <group>
+                    <field name="event_ids"/>
+                  </group>
+                </page>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>
