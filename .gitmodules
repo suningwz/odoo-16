@@ -30,3 +30,7 @@
 	path = bank-payment
 	url = https://github.com/rdeheele/bank-payment.git
 	branch = 13.0
+[submodule "stock-logistics-warehouse"]
+	path = stock-logistics-warehouse
+	url = https://github.com/OCA/stock-logistics-warehouse.git
+	branch = 13.0
