@@ -111,7 +111,7 @@ class FtpJob(models.Model):
     def _set_datetime_job(self, ftp_type, from_datetime):
         now = fields.Datetime.now()
         #from_datetime = now - relativedelta(minutes=interval_number)
-        new_job self.create({'ftp_type': ftp_type,
+        new_job = self.create({'ftp_type': ftp_type,
                              'from_datetime': from_datetime,
                              'to_datetime': now,
                              'state': 'draft'})
