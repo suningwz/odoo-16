@@ -32,6 +32,7 @@ class FtpBackend(models.Model):
 
 class FtpEvent(models.Model):
     _name = "ftp.event"
+    _order = "id desc"
 
     def _compute_name(self):
         for event in self:
@@ -408,13 +409,17 @@ class StockPicking(models.Model):
 
     event_ids = fields.One2many('ftp.event', 'picking_id', 'Events')
 
-    #teste: ok
-    def action_assign(self):
-        super(StockPicking, self).action_assign()
-        if self.picking_type_id.id == 2 and self.state == 'assigned':
-            self.env['ftp.event'].create({'name': self.name,
-                                          'picking_id': self.id,
-                                          'ftp_type': 'SHIP_OUT'})
+    @api.depends('move_type', 'immediate_transfer', 'move_lines.state', 'move_lines.picking_id')
+    def _compute_state(self):
+        super(StockPicking, self)._compute_state()
+        for picking in self:
+            if picking.move_lines:
+                if picking.picking_type_id.id == 2:
+                    relevant_move_state = picking.move_lines._get_relevant_state_among_moves()
+                    if relevant_move_state == 'assigned':
+                        self.env['ftp.event'].create({'name': picking.name,
+                                                      'picking_id': picking.id,
+                                                      'ftp_type': 'SHIP_OUT'})
 
      #stock.picking, action_done
      #purchase.order, button_approve
