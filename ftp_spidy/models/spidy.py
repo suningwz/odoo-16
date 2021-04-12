@@ -69,6 +69,7 @@ class FtpEvent(models.Model):
 class FtpJob(models.Model):
     _name = "ftp.job"
     _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
+    _order = "id desc"
 
     def _compute_name(self):
         for job in self:
@@ -110,15 +111,17 @@ class FtpJob(models.Model):
     def _set_datetime_job(self, ftp_type, from_datetime):
         now = fields.Datetime.now()
         #from_datetime = now - relativedelta(minutes=interval_number)
-        self.create({'ftp_type': ftp_type,
-                     'from_datetime': from_datetime,
-                     'to_datetime': now,
-                     'state': 'draft'})
+        new_job self.create({'ftp_type': ftp_type,
+                             'from_datetime': from_datetime,
+                             'to_datetime': now,
+                             'state': 'draft'})
+        return new_job
 
     def _scheduler_ftp_export_shipping(self):
         last_job = self.search([('ftp_type','=','SHIP_OUT')], order='id desc', limit=1)
         from_datetime = last_job and last_job.to_datetime or False
-        self._set_datetime_job('SHIP_OUT', last_job.to_datetime)
+        new_job = self._set_datetime_job('SHIP_OUT', last_job.to_datetime)
+        new_job.action_plan()
 
     def _scheduler_ftp_export_receiving(self, interval_numer):
         last_job = self.search([('ftp_type','=','REC_OUT')], order='id desc', limit=1)
