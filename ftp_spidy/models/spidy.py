@@ -32,6 +32,7 @@ class FtpBackend(models.Model):
 
 class FtpEvent(models.Model):
     _name = "ftp.event"
+    _order = "id desc"
 
     def _compute_name(self):
         for event in self:
@@ -69,6 +70,7 @@ class FtpEvent(models.Model):
 class FtpJob(models.Model):
     _name = "ftp.job"
     _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
+    _order = "id desc"
 
     def _compute_name(self):
         for job in self:
@@ -107,18 +109,24 @@ class FtpJob(models.Model):
     def _scheduler_ftp_export_barcodes(self):
         self.create({'ftp_type': 'BARCODE_OUT', 'state': 'progress'})
 
-    def _set_datetime_job(self, ftp_type, interval_number):
+    def _set_datetime_job(self, ftp_type, from_datetime):
         now = fields.Datetime.now()
-        from_datetime = now - relativedelta(minutes=interval_number)
-        self.create({'ftp_type': ftp_type,
-                     'from_datetime': from_datetime,
-                     'to_datetime': now,
-                     'state': 'draft'})
+        #from_datetime = now - relativedelta(minutes=interval_number)
+        new_job = self.create({'ftp_type': ftp_type,
+                             'from_datetime': from_datetime,
+                             'to_datetime': now,
+                             'state': 'draft'})
+        return new_job
 
-    def _scheduler_ftp_export_shipping(self, interval_number):
-        self._set_datetime_job('SHIP_OUT', interval_number)
+    def _scheduler_ftp_export_shipping(self):
+        last_job = self.search([('ftp_type','=','SHIP_OUT')], order='id desc', limit=1)
+        from_datetime = last_job and last_job.to_datetime or False
+        new_job = self._set_datetime_job('SHIP_OUT', last_job.to_datetime)
+        new_job.action_plan()
 
     def _scheduler_ftp_export_receiving(self, interval_numer):
+        last_job = self.search([('ftp_type','=','REC_OUT')], order='id desc', limit=1)
+        from_datetime = last_job and last_job.to_datetime or False
         self._set_datetime_job('REC_OUT')
 
     def parse_attachment_and_create_events(self):
@@ -236,7 +244,7 @@ class FtpJob(models.Model):
                 partner = pick.partner_id
                 datas.append(['', 'ASF', 'LVD', sale.name, 'RES', partner.name or '', partner.street or '', partner.street2 or '', '',
                               partner.zip or '', partner.city or '', partner.country_id and partner.country_id.code or '',
-                              '', '', '', '', '', 1, pick.scheduled_date and (pick.scheduled_date.strftime('%y%m%d')) or '',
+                              '', '', partner.email or '', '', '', 1, pick.scheduled_date and (pick.scheduled_date.strftime('%y%m%d')) or '',
                               'CPTR', '', '', '', '', '', '1', '', '', '', '', 'RES',
                               line_nb, line.product_id and line.product_id.default_code or '', '', int(line.product_uom_qty) or '', '', '',
                               line.product_id and str(line.product_id.standard_price).replace('.',',') or '0,0',
@@ -401,13 +409,17 @@ class StockPicking(models.Model):
 
     event_ids = fields.One2many('ftp.event', 'picking_id', 'Events')
 
-    #teste: ok
-    def action_assign(self):
-        super(StockPicking, self).action_assign()
-        if self.picking_type_id.id == 2 and self.state == 'assigned':
-            self.env['ftp.event'].create({'name': self.name,
-                                          'picking_id': self.id,
-                                          'ftp_type': 'SHIP_OUT'})
+    @api.depends('move_type', 'immediate_transfer', 'move_lines.state', 'move_lines.picking_id')
+    def _compute_state(self):
+        super(StockPicking, self)._compute_state()
+        for picking in self:
+            if picking.move_lines:
+                if picking.picking_type_id.id == 2:
+                    relevant_move_state = picking.move_lines._get_relevant_state_among_moves()
+                    if relevant_move_state == 'assigned':
+                        self.env['ftp.event'].create({'name': picking.name,
+                                                      'picking_id': picking.id,
+                                                      'ftp_type': 'SHIP_OUT'})
 
      #stock.picking, action_done
      #purchase.order, button_approve
