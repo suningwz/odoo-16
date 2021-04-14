@@ -244,7 +244,7 @@ class FtpJob(models.Model):
                 partner = pick.partner_id
                 datas.append(['', 'ASF', 'LVD', sale.name, 'RES', partner.name or '', partner.street or '', partner.street2 or '', '',
                               partner.zip or '', partner.city or '', partner.country_id and partner.country_id.code or '',
-                              '', '', '', '', '', 1, pick.scheduled_date and (pick.scheduled_date.strftime('%y%m%d')) or '',
+                              '', '', partner.email or '', '', '', 1, pick.scheduled_date and (pick.scheduled_date.strftime('%y%m%d')) or '',
                               'CPTR', '', '', '', '', '', '1', '', '', '', '', 'RES',
                               line_nb, line.product_id and line.product_id.default_code or '', '', int(line.product_uom_qty) or '', '', '',
                               line.product_id and str(line.product_id.standard_price).replace('.',',') or '0,0',
