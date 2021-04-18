@@ -81,6 +81,7 @@
                         <field name="sale_id"/>
                         <field name="partner_id"/>
                         <field name="ftp_type"/>
+                        <field name="tracking_number"/>
                     </group>
                 </sheet>
             </form>

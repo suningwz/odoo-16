@@ -3,6 +3,7 @@
 
 import io, csv
 import base64
+import ftplib
 from datetime import datetime
 import pytz
 from dateutil.relativedelta import relativedelta
@@ -42,12 +43,13 @@ class FtpEvent(models.Model):
                 event.name = ''
 
     name = fields.Char('Name', compute='_compute_name')
-    ftp_type = fields.Selection([('SHIP_OUT', 'SHIP_OUT'), ('REC_OUT', 'REC_OUT')], 'Type')
+    ftp_type = fields.Selection([('SHIP_OUT', 'SHIP_OUT'), ('REC_OUT', 'REC_OUT'), ('SHIP_IN', 'SHIP_IN')], 'Type')
     state = fields.Selection([('draft', 'Draft'), ('ready', 'Ready'), ('done', 'Done')], 'State', default='draft')
     job_id = fields.Many2one('ftp.job', 'Job')
     picking_id = fields.Many2one('stock.picking', 'Picking')
     sale_id = fields.Many2one('sale.order', related='picking_id.sale_id', string='Sale Order')
     partner_id = fields.Many2one('res.partner', related='picking_id.partner_id', string='Partner')
+    tracking_number = fields.Char('Tracking Number')
 
     @api.onchange('ftp_type')
     def onchange_ftp_type(self):
@@ -58,6 +60,12 @@ class FtpEvent(models.Model):
                 return {'domain': {'picking_id': [('picking_type_id', '=', 1),('state','=','assigned')]}}
 
     def action_done(self):
+        if self.ftp_type == 'SHIP_IN':
+            if not self.picking_id.carrier_tracking_ref:
+                if self.tracking_number:
+                    self.picking_id.write({'carrier_tracking_ref': self.tracking_number})
+            if self.picking_id.state not in ['done','cancel']:
+                self.picking_id.validate_picking()
         self.write({'state': 'done'})
 
     def execute_ready_in_events(self):
@@ -74,9 +82,13 @@ class FtpJob(models.Model):
 
     def _compute_name(self):
         for job in self:
-            tz = pytz.timezone('Europe/Paris')
-            to_datetime = pytz.utc.localize(job.to_datetime).astimezone(tz)
-            job.name = job.ftp_type + ' ' + to_datetime.strftime("%Y-%m-%d %H:%M:%S")
+            if job.ftp_type == 'SHIP_IN':
+                attachment = self.env['ir.attachment'].search([('res_model','=','ftp.job'),('res_id','=',job.id)])
+                job.name = attachment.name
+            else:
+                tz = pytz.timezone('Europe/Paris')
+                to_datetime = pytz.utc.localize(job.to_datetime).astimezone(tz)
+                job.name = job.ftp_type + ' ' + to_datetime.strftime("%Y-%m-%d %H:%M:%S")
 
     name = fields.Char('Name', compute='_compute_name')
     ftp_type = fields.Selection([('BARCODE_OUT', 'Barcode OUT'),
@@ -98,7 +110,7 @@ class FtpJob(models.Model):
     product_ids = fields.Many2many('product.product', string='Products')
 
     def _scheduler_ftp_import_in_files(self):
-        #self.action_receive_files('/IN/RES/CR_PRE/', 'SHIP_IN')
+        self.action_receive_files('/IN/RES/CR_PRE/', 'SHIP_IN')
         #self.action_receive_files('/IN/RES/CR_REC/', 'REC_IN')
         #self.action_receive_files('/IN/RES/CR_MVT/', 'MVT_IN')
         return True
@@ -129,8 +141,22 @@ class FtpJob(models.Model):
         from_datetime = last_job and last_job.to_datetime or False
         self._set_datetime_job('REC_OUT')
 
-    def parse_attachment_and_create_events(self):
-        return True
+    def parse_ship_in_attachment(self):
+        attachment = self.env['ir.attachment'].search([('res_model','=','ftp.job'),('res_id','=',self.id)])
+        content = base64.b64decode(attachment[0].datas)
+        reader = csv.reader(content.decode('iso-8859-1').split('\n'), delimiter=';')
+        for row in reader:
+            if row:
+                if row[0] == 'ENT':
+                    sale_name = row[3]
+                if row[0] == 'COL':
+                    tracking = row[8].strip()
+        sale = self.env['sale.order'].search([('name','=',sale_name)])
+        if sale:
+            self.env['ftp.event'].create({'picking_id':sale[0].picking_ids.id, 'job_id': self.id,
+                                          'ftp_type': 'SHIP_IN', 'tracking_number': tracking, 'state': 'ready'})
+            return True
+        return False
 
     def action_plan(self):
         if self.ftp_type in ['BARCODE_OUT','PRODUCT_OUT']:
@@ -148,8 +174,8 @@ class FtpJob(models.Model):
             else:
                 self.write({'state': 'done'})
         elif 'IN' in self.ftp_type:
-            self.parse_attachment_and_create_events()
-            self.write({'state': 'progress'})
+            if self.parse_ship_in_attachment():
+                self.write({'state': 'ready'})
         else:
             self.write({'state': 'done'})
 
@@ -312,39 +338,42 @@ class FtpJob(models.Model):
                     'ftp_file': base64.b64encode(open(path_file, 'rb').read())
                     })"""
 
-    def ftp_connect(self):
+    """def ftp_connect(self):
         backend = self.env['ftp.backend'].search([],limit=1)
         from ftplib import FTP
         ftp = FTP(backend.host)
         ftp.login(user=backend.username, passwd=backend.password)
-        return ftp
+        return ftp"""
 
     def action_receive_files(self, remote_path, ftp_type):
-        import base64
-        ftp = self.ftp_connect()
+        backend = self.env['ftp.backend'].search([],limit=1)
+        ftp = ftplib.FTP(backend.host)
+        ftp.login(user=backend.username,passwd=backend.password)
+        remote_path = '/IN/RES/CR_PRE/'
         ftp.cwd(remote_path)
-        #remote_path = '/IN/RES/CR_PRE/'
         local_path = '/tmp/'
-        #files = []
         filenames = ftp.nlst()
         for filename in filenames:
             file = open('/tmp/' + filename, 'wb')
             ftp.retrbinary('RETR ' + filename, file.write, 1024)
             file.close()
         ftp.quit()
+        #filenames = ['CR_PRE20210415155401814.CSV']
         for filename in filenames:
-            with open('/tmp/' + filename, 'rb') as f:
-                content = f.read()
-                job_id = self.create({'ftp_type': ftp_type,
-                                      'to_datetime': fields.Datetime.now(),
-                                      'state': 'draft'})
-                attachment = self.env['ir.attachment'].create({
-                    'datas': base64.b64encode(content),
-                    'name': filename,
-                    'type': 'binary',
-                    'res_id': job_id,
-                    'res_model': 'ftp.job'
-                })
+            att_id = self.env['ir.attachment'].search([('name','=',filename),('res_model','=','ftp.job')])
+            if not att_id:
+                with open('/tmp/' + filename, 'rb') as f:
+                    content = f.read()
+                    job_id = self.create({'ftp_type': ftp_type,
+                                          'to_datetime': fields.Datetime.now(),
+                                          'state': 'draft'})
+                    attachment = self.env['ir.attachment'].create({
+                        'datas': base64.b64encode(content),
+                        'name': filename,
+                        'type': 'binary',
+                        'res_id': job_id,
+                        'res_model': 'ftp.job'
+                    })
         return True
 
     """for filename in sftp.listdir(remote_path):
@@ -378,16 +407,19 @@ class FtpJob(models.Model):
         ssh.close()"""
 
     def action_send_file(self):
-        ssh, sftp = self.ftp_connect()
+        return False
+        backend = self.env['ftp.backend'].search([],limit=1)
         attachment = self.env['ir.attachment'].search([('res_model','=','ftp.job'),
                                                        ('res_id','=',self.id)],
                                                       order='id desc', limit=1)
-        filename = attachment.name
-        remote_path = '/uploads/' + filename
-        local_path = '/tmp/' + filename
-        test = sftp.put(localpath, path)
-        sftp.close()
-        ssh.close()
+        datas = attachment.datas
+        file = open('/tmp/' + attachment.name, "wb")
+        file.write(datas)
+        file.close()
+        local_path = '/tmp/' + attachment.name
+        remote_path = '/IN/RES/CR_PRE/' + attachment.name
+        with ftplib.FTP(backend.host, backend.username, backend.password) as ftp, open(local_path, 'rb') as file:
+            ftp.storbinary(f'STOR {remote_path}', file)
 
     def action_ready(self):
         for event in self.event_ids:
@@ -399,7 +431,12 @@ class FtpJob(models.Model):
             for event in self.event_ids:
                 event.action_done()
             self.write({'state': 'done'})
-        if 'IN' in self.ftp_type:
+        elif 'SHIP_IN' in self.ftp_type:
+            for event in self.event_ids:
+                event.action_done()
+            if all(event.state == 'done' for event in self.event_ids):
+                self.write({'state': 'done'})
+        elif 'IN' in self.ftp_type:
             if all(event.state == "done" for event in self.event_ids):
                 self.write({'state': 'done'})
 
