@@ -153,8 +153,11 @@ class FtpJob(models.Model):
                     tracking = row[8].strip()
         sale = self.env['sale.order'].search([('name','=',sale_name)])
         if sale:
-            self.env['ftp.event'].create({'picking_id':sale[0].picking_ids.id, 'job_id': self.id,
-                                          'ftp_type': 'SHIP_IN', 'tracking_number': tracking, 'state': 'ready'})
+            if sale.picking_ids:
+                for pick in sale.picking_ids:
+                    if pick.picking_type_id.id == 2:
+                        self.env['ftp.event'].create({'picking_id': pick.id, 'job_id': self.id,
+                                                      'ftp_type': 'SHIP_IN', 'tracking_number': tracking, 'state': 'ready'})
             return True
         return False
 
