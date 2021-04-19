@@ -316,7 +316,7 @@ class FtpJob(models.Model):
             writer = csv.writer(f, delimiter=';', quotechar='"')
             for data in datas:
                 writer.writerow(data)
-            content = base64.encodebytes(f.getvalue().encode('utf-8'))
+            content = base64.encodebytes(f.getvalue().encode('iso-8859-1'))
             tz = pytz.timezone('Europe/Paris')
             to_datetime = pytz.utc.localize(self.to_datetime).astimezone(tz)
             attachment = self.env['ir.attachment'].create({
