@@ -109,6 +109,18 @@ class FtpJob(models.Model):
     event_ids = fields.One2many('ftp.event', 'job_id', 'Events')
     product_ids = fields.Many2many('product.product', string='Products')
 
+    def _scheduler_ftp_in_action_ready(self):
+        draft_jobs = self.search([('ftp_type', '=', 'SHIP_IN'), ('state', '=', 'draft')])
+        for job in draft_jobs:
+            job.action_plan()
+        return True
+
+    def _scheduler_ftp_in_action_done(self):
+        ready_jobs = self.search([('ftp_type', '=', 'SHIP_IN'), ('state', '=', 'ready')])
+        for job in ready_jobs:
+            job.action_done()
+        return True
+
     def _scheduler_ftp_import_in_files(self):
         self.action_receive_files('/IN/RES/CR_PRE/', 'SHIP_IN')
         #self.action_receive_files('/IN/RES/CR_REC/', 'REC_IN')
