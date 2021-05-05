@@ -12,7 +12,7 @@ class SaleOrder(models.Model):
         for record in self:
             if not record.partner_id:
                 record.type_id = self.env["sale.order.type"].search(
-                    [("company_id", "in", [self.env.company.id, False])], order='id desc', limit=1
+                    [('name', '=', 'B2B Odoo')], order='id desc', limit=1
                 )
             else:
                 sale_type = (
