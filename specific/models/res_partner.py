@@ -14,6 +14,8 @@ class ResPartner(models.Model):
             sale_type = self.env["sale.order.type"].browse(vals["sale_type"])
             if sale_type.partner_sequence_id:
                 vals["ref"] = sale_type.partner_sequence_id.next_by_id()
+            if sale_type.id == 5:
+                vals['x_studio_typologie_du_contact'] = 'Client Web Odoo'
         return super(ResPartner, self).create(vals)
 
 

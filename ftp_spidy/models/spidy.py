@@ -43,7 +43,7 @@ class FtpEvent(models.Model):
                 event.name = ''
 
     name = fields.Char('Name', compute='_compute_name')
-    ftp_type = fields.Selection([('SHIP_OUT', 'SHIP_OUT'), ('REC_OUT', 'REC_OUT'), ('SHIP_IN', 'SHIP_IN')], 'Type')
+    ftp_type = fields.Selection([('SHIP_OUT', 'SHIP_OUT'), ('REC_OUT', 'REC_OUT'), ('SHIP_IN', 'SHIP_IN')], 'Type', default='SHIP_OUT')
     state = fields.Selection([('draft', 'Draft'), ('ready', 'Ready'), ('done', 'Done')], 'State', default='draft')
     job_id = fields.Many2one('ftp.job', 'Job')
     picking_id = fields.Many2one('stock.picking', 'Picking')
@@ -167,7 +167,7 @@ class FtpJob(models.Model):
         if sale:
             if sale.picking_ids:
                 for pick in sale.picking_ids:
-                    if pick.picking_type_id.id == 2:
+                    if pick.picking_type_id.id == 2 and tracking:
                         self.env['ftp.event'].create({'picking_id': pick.id, 'job_id': self.id,
                                                       'ftp_type': 'SHIP_IN', 'tracking_number': tracking, 'state': 'ready'})
             return True

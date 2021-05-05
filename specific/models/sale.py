@@ -12,7 +12,7 @@ class SaleOrder(models.Model):
         for record in self:
             if not record.partner_id:
                 record.type_id = self.env["sale.order.type"].search(
-                    [("company_id", "in", [self.env.company.id, False])], order='id desc', limit=1
+                    [('name', '=', 'B2B Odoo')], order='id desc', limit=1
                 )
             else:
                 sale_type = (
@@ -25,6 +25,9 @@ class SaleOrder(models.Model):
                 )
                 if sale_type:
                     record.type_id = sale_type
+                if sale_type.id == 5:
+                    record.x_studio_type_de_livraison = "Log'ins"
+                    record.x_studio_statut_rsilience = "Envoyé à l’entrepôt"
 
     @api.onchange("type_id")
     def onchange_type_id(self):
@@ -33,6 +36,9 @@ class SaleOrder(models.Model):
             order_type = order.type_id
             if order_type.workflow_process_id:
                 order.update({'workflow_process_id': order_type.workflow_process_id})
+            if order_type.id == 5:
+                order.update({"x_studio_type_de_livraison": "Log'ins",
+                              "x_studio_statut_rsilience": "Envoyé à l’entrepôt"})
 
 
 class SaleOrderImportMapper(Component):
@@ -45,6 +51,10 @@ class SaleOrderImportMapper(Component):
     @mapping
     def studio2(self, record):
         return {'x_studio_type_de_livraison': "Log'ins"}
+
+    @mapping
+    def team(self, record):
+        return {'team_id': 2}
 
     """@mapping
     def studio3(self, record):
