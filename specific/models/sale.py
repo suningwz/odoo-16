@@ -52,6 +52,10 @@ class SaleOrderImportMapper(Component):
     def studio2(self, record):
         return {'x_studio_type_de_livraison': "Log'ins"}
 
+    @mapping
+    def team(self, record):
+        return {'team_id': 2}
+
     """@mapping
     def studio3(self, record):
         return {'x_studio_typologie_du_contact': "Client B2C"}"""
