@@ -4,6 +4,7 @@
 import io, csv
 import base64
 import ftplib
+import paramiko
 from datetime import datetime
 import pytz
 from dateutil.relativedelta import relativedelta
@@ -363,18 +364,24 @@ class FtpJob(models.Model):
 
     def action_receive_files(self, remote_path, ftp_type):
         backend = self.env['ftp.backend'].search([],limit=1)
-        ftp = ftplib.FTP(backend.host)
-        ftp.login(user=backend.username,passwd=backend.password)
-        remote_path = '/IN/RES/CR_PRE/'
-        ftp.cwd(remote_path)
-        local_path = '/tmp/'
-        filenames = ftp.nlst()
+        #ftp = ftplib.FTP(backend.host)
+        #ftp.login(user=backend.username,passwd=backend.password)
+        host,port = backend.host,backend.port
+        transport = paramiko.Transport((host,port))
+        transport.connect(None, backend.username, backend.password)
+        sftp = paramiko.SFTPClient.from_transport(transport)
+        #remote_path = '/IN/RES/CR_PRE/'
+        #ftp.cwd(remote_path)
+        #local_path = '/tmp/'
+        #filenames = ftp.nlst()
+        filenames = sftp.listdir('/RES/IN/RES/CR_PRE/')
         for filename in filenames:
+            sftp.get('/RES/IN/RES/CR_PRE/' + filename, '/tmp/' + filename)
+        """for filename in filenames:
             file = open('/tmp/' + filename, 'wb')
             ftp.retrbinary('RETR ' + filename, file.write, 1024)
             file.close()
-        ftp.quit()
-        #filenames = ['CR_PRE20210415155401814.CSV']
+        ftp.quit()"""
         for filename in filenames:
             att_id = self.env['ir.attachment'].search([('name','=',filename),('res_model','=','ftp.job')])
             if not att_id:
