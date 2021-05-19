@@ -291,11 +291,12 @@ class FtpJob(models.Model):
                 line_nb += 1
                 sale = pick.sale_id
                 partner = pick.partner_id
+                carrier_code = pick.carrier_id and pick.carrier_id.ftp_code or 'INT'
                 datas.append(['', 'ASF', 'LVD', sale.name, 'RES', partner.name or '', partner.street or '', partner.street2 or '', '',
                               partner.zip or '', partner.city or '', partner.country_id and partner.country_id.code or '',
                               '', '', partner.parent_id and partner.parent_id.email or partner.email or '', '', '', 1,
                               pick.scheduled_date and (pick.scheduled_date.strftime('%y%m%d')) or '',
-                              'CPTR', '', '', '', '', '', '1', '', '', '', '', 'RES',
+                              carrier_code, '', '', '', '', '', '1', '', '', '', '', 'RES',
                               line_nb, line.product_id and line.product_id.default_code or '', '', int(line.product_uom_qty) or '', '', '',
                               line.product_id and str(line.product_id.standard_price).replace('.',',') or '0,0',
                               'logistique@projet-resilience.fr','','','','','','','','','','',
@@ -433,6 +434,12 @@ class FtpJob(models.Model):
         elif 'IN' in self.ftp_type:
             if all(event.state == "done" for event in self.event_ids):
                 self.write({'state': 'done'})
+
+
+class DeliveryCarrier(models.Model):
+    _inherit = 'delivery.carrier'
+
+    ftp_code = fields.Char('FTP Code')
 
 
 class StockPicking(models.Model):
