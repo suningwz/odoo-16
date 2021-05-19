@@ -292,9 +292,10 @@ class FtpJob(models.Model):
                 sale = pick.sale_id
                 partner = pick.partner_id
                 carrier_code = pick.carrier_id and pick.carrier_id.ftp_code or 'INT'
-                datas.append(['', 'ASF', 'LVD', sale.name, 'RES', partner.name or '', partner.street or '', partner.street2 or '', '',
-                              partner.zip or '', partner.city or '', partner.country_id and partner.country_id.code or '',
-                              '', '', partner.parent_id and partner.parent_id.email or partner.email or '', '', '', 1,
+                datas.append(['', 'ASF', 'LVD', sale.name, 'RES', partner.name.replace('’',' ') or '', partner.street.replace('’',' ') or '',
+                              partner.street2.replace('’',' ') or '', '', partner.zip or '', partner.city.replace('’',' ') or '',
+                              partner.country_id and partner.country_id.code or '', '', '',
+                              partner.parent_id and partner.parent_id.email or partner.email or '', '', '', 1,
                               pick.scheduled_date and (pick.scheduled_date.strftime('%y%m%d')) or '',
                               carrier_code, '', '', '', '', '', '1', '', '', '', '', 'RES',
                               line_nb, line.product_id and line.product_id.default_code or '', '', int(line.product_uom_qty) or '', '', '',
