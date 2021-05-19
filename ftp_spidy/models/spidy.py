@@ -393,6 +393,7 @@ class FtpJob(models.Model):
                         'res_id': job_id,
                         'res_model': 'ftp.job'
                     })
+                    job_id.action_plan()
         return True
 
     def action_send_file(self):
