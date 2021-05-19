@@ -122,6 +122,12 @@ class FtpJob(models.Model):
             job.action_done()
         return True
 
+    def _scheduler_ftp_out_action_done(self):
+        ready_jobs = self.search([('ftp_type', '=', 'SHIP_OUT'), ('state', '=', 'ready')])
+        for job in ready_jobs:
+            job.action_done()
+        return True
+
     def _scheduler_ftp_import_in_files(self):
         self.action_receive_files('/IN/RES/CR_PRE/', 'SHIP_IN')
         #self.action_receive_files('/IN/RES/CR_REC/', 'REC_IN')
@@ -187,6 +193,7 @@ class FtpJob(models.Model):
             if event_ids or self.event_ids:
                 event_ids.write({'job_id': self.id})
                 self.write({'state': 'progress'})
+                self.action_make_file()
             else:
                 self.write({'state': 'done'})
         elif 'IN' in self.ftp_type:
@@ -364,24 +371,13 @@ class FtpJob(models.Model):
 
     def action_receive_files(self, remote_path, ftp_type):
         backend = self.env['ftp.backend'].search([],limit=1)
-        #ftp = ftplib.FTP(backend.host)
-        #ftp.login(user=backend.username,passwd=backend.password)
         host,port = backend.host,backend.port
         transport = paramiko.Transport((host,port))
         transport.connect(None, backend.username, backend.password)
         sftp = paramiko.SFTPClient.from_transport(transport)
-        #remote_path = '/IN/RES/CR_PRE/'
-        #ftp.cwd(remote_path)
-        #local_path = '/tmp/'
-        #filenames = ftp.nlst()
         filenames = sftp.listdir('/RES/IN/RES/CR_PRE/')
         for filename in filenames:
             sftp.get('/RES/IN/RES/CR_PRE/' + filename, '/tmp/' + filename)
-        """for filename in filenames:
-            file = open('/tmp/' + filename, 'wb')
-            ftp.retrbinary('RETR ' + filename, file.write, 1024)
-            file.close()
-        ftp.quit()"""
         for filename in filenames:
             att_id = self.env['ir.attachment'].search([('name','=',filename),('res_model','=','ftp.job')])
             if not att_id:
@@ -398,36 +394,6 @@ class FtpJob(models.Model):
                         'res_model': 'ftp.job'
                     })
         return True
-
-    """for filename in sftp.listdir(remote_path):
-            if fnmatch.fnmatch(filename, "*.CSV"):
-                files.append(filename)
-        for file in files:
-            file_remote = remote_path + file
-            file_local = local_path + file
-
-            print(file_remote + '>>>' + file_local)
-
-            sftp.get(file_remote, file_local)
-
-            fichier = open(file_local, 'r')
-            fichier_string = fichier.read()
-            fichier_base64 = base64.encodestring(fichier_string)
-            fichier.close()
-            now = fields.Datetime.now()
-            ftp_type = 'SHIP_IN' # TODO: reprendre qd acces au FTP IN
-            job_id = self.create({'ftp_type': ftp_type,
-                                  'to_datetime': now,
-                                  'state': 'draft'})
-            attachment = self.env['ir.attachment'].create({
-                'datas': fichier_base64,
-                'name': file,
-                'type': 'binary',
-                'res_id': job_id,
-                'res_model': 'ftp.job'
-            })
-        sftp.close()
-        ssh.close()"""
 
     def action_send_file(self):
         backend = self.env['ftp.backend'].search([],limit=1)
@@ -454,7 +420,7 @@ class FtpJob(models.Model):
 
     def action_done(self):
         if 'OUT' in self.ftp_type:
-            #self.action_send_file()
+            self.action_send_file()
             for event in self.event_ids:
                 event.action_done()
             self.write({'state': 'done'})
