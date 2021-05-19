@@ -125,7 +125,7 @@
                 </header>
                 <sheet>
                     <group name="Ftp">
-                        <field name="ftp_type" attrs="{'readonly': [('state', 'in', ('progress','ready','done'))]}"/>
+                        <field name="ftp_type" required="True" attrs="{'readonly': [('state', 'in', ('progress','ready','done'))]}"/>
                         <field name="name"/>
                         <field name="from_datetime" attrs="{'readonly': [('state', 'in', ('ready','done'))]}"/>
                         <field name="to_datetime" attrs="{'readonly': [('state', 'in', ('ready','done'))]}"/>
