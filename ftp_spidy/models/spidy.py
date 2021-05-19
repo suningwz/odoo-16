@@ -430,19 +430,23 @@ class FtpJob(models.Model):
         ssh.close()"""
 
     def action_send_file(self):
-        return False
         backend = self.env['ftp.backend'].search([],limit=1)
-        attachment = self.env['ir.attachment'].search([('res_model','=','ftp.job'),
-                                                       ('res_id','=',self.id)],
+        host,port = backend.host,backend.port
+        ssh = paramiko.SSHClient()
+        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        ssh.connect(host, port, backend.username, backend.password)
+        sftp = ssh.open_sftp()
+
+        attachment = self.env['ir.attachment'].search([('res_model', '=', 'ftp.job'),
+                                                       ('res_id', '=', self.id)],
                                                       order='id desc', limit=1)
-        datas = attachment.datas
-        file = open('/tmp/' + attachment.name, "wb")
-        file.write(datas)
-        file.close()
-        local_path = '/tmp/' + attachment.name
-        remote_path = '/IN/RES/CR_PRE/' + attachment.name
-        with ftplib.FTP(backend.host, backend.username, backend.password) as ftp, open(local_path, 'rb') as file:
-            ftp.storbinary(f'STOR {remote_path}', file)
+        remote_path = '/RES/OUT/' + attachment.name.replace(' ','_').replace(':','')
+        local_path = attachment._full_path(attachment.store_fname)
+
+        sftp.put(local_path, remote_path)
+
+        sftp.close()
+        ssh.close()
 
     def action_ready(self):
         for event in self.event_ids:
