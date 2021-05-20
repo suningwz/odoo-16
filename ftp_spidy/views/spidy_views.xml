@@ -35,6 +35,7 @@
                         <field name="port"/>
                         <field name="username"/>
                         <field name="password"/>
+                        <field name="email"/>
                     </group>
                 </sheet>
             </form>

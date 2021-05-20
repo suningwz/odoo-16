@@ -30,6 +30,7 @@ class FtpBackend(models.Model):
     port = fields.Integer('Port')
     username = fields.Char('Username')
     password = fields.Char('Password')
+    email = fields.Char('Email')
 
 
 class FtpEvent(models.Model):
@@ -213,6 +214,7 @@ class FtpJob(models.Model):
         return datas
 
     def _prepare_product_out_datas(self):
+        backend = self.env['ftp.backend'].search([],limit=1)
         datas = []
         datas.append(['Société', 'Entrepôt', 'Erreurs (réservé Spidy)', 'Client Propriétaire',
                       'Code Produit (majuscules)', 'Réservé SPIDY', 'Désignation article', 'Caractéristiques articles',
@@ -241,7 +243,7 @@ class FtpJob(models.Model):
             datas.append(['ASF', 'LVD', '', 'RES', product.default_code, '', product.name, '', '', '', 'UN', 'Unité', 1,
                           '', '', '', '', '', '', 1, product.weight, '', '', '', '', '', product.list_price, 1,
                           '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
-                          '', '', '', '2', '', 'AT', '', '', '', 'logistique@projet-resilience.fr',
+                          '', '', '', '2', '', 'AT', '', '', '', backend.email or '',
                           '', '', '', '', '', '', '', '', '', '', '', '', '',
                           '', '', '', '', '', '', '', '', '', '', '', '', '',
                           '', '', '', '', '', '', '', '', '', '', '', '', ''])
@@ -284,6 +286,7 @@ class FtpJob(models.Model):
                       'Impression_commentaire_comp_5_sur_BL___print_additionnal_comment_5_on_delivery_note',
                       'Destinataire_commande___Order_consignee', 'Type_de_client___Customer_type', 'Identifiant_1___identifier_1',
                       'Identifiant_2___identifier_2', 'Identifiant_3___identifier_3', 'Type_d_adresse___Adress_type', 'Code_agence___Agency_code'])
+        backend = self.env['ftp.backend'].search([],limit=1)
         for event in self.event_ids:
             pick = event.picking_id
             line_nb = 0
@@ -300,11 +303,12 @@ class FtpJob(models.Model):
                               carrier_code, '', '', '', '', '', '1', '', '', '', '', 'RES',
                               line_nb, line.product_id and line.product_id.default_code or '', '', int(line.product_uom_qty) or '', '', '',
                               line.product_id and str(line.product_id.standard_price).replace('.',',') or '0,0',
-                              'logistique@projet-resilience.fr','','','','','','','','','','',
+                              backend.email or '', '', '', '', '', '', '', '', '', '', '',
                               partner.phone or '', '','','','','','','','','','','','','','','','','','',''])
         return datas
 
     def _prepare_rec_out_datas(self):
+        backend = self.env['ftp.backend'].search([],limit=1)
         datas = []
         datas.append(['Réservé SPIDY', 'Société', 'Entrepôt', 'Type d\'entrée', 'Nature de l\'entrée marchandise',
                       'N° de reference de l\'entrée attendue', 'Siecle', 'Date entrée prévisionnelle', 'Raison sociale vendeur',
@@ -316,7 +320,7 @@ class FtpJob(models.Model):
             for line in pick.move_lines:
                 datas.append(['', 'ASF', 'ATS', 'R', '', 'ATE/' + pick.name, '' , '', '', 'RES', '',
                               line.product_id.default_code, '', '', '', '', '', '', '', '',
-                              line.product_id.default_code, line.product_uom_qty, 'logistique@projet-resilience.fr'])
+                              line.product_id.default_code, line.product_uom_qty, backend.email or ''])
         return datas
 
     def _prepare_datas(self):
